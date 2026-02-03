@@ -6,7 +6,7 @@ import requests
 st.set_page_config(page_title="SECURE TERMINAL", page_icon="🔒")
 
 # --- REPLACE THIS WITH YOUR EMAIL ---
-MY_EMAIL = "YOUR_EMAIL_HERE@example.com" 
+MY_EMAIL = "kevinnederlof38@gmail.com" 
 
 # --- CUSTOM CSS ---
 st.markdown("""
