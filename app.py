@@ -6,7 +6,7 @@ import requests
 st.set_page_config(page_title="SECURE TERMINAL", page_icon="🔒")
 
 # --- REPLACE THIS WITH YOUR EMAIL ---
-MY_EMAIL = "kevinnederlof38@gmail.com" 
+MY_EMAIL = "kevin@visioneliteassets.xyz" 
 
 # --- CUSTOM CSS ---
 st.markdown("""
@@ -69,23 +69,24 @@ elif st.session_state.step == 2:
             if len(q1) > 2:
                 with st.spinner("TRANSMITTING..."):
                     try:
-                        # --- DEBUG MODE ON ---
-                        # We are capturing the specific response from the email server
+                        # --- MODIFIED SEND LOGIC ---
+                        # We removed '_captcha': 'false' to force the activation email.
                         response = requests.post(
                             f"https://formsubmit.co/{MY_EMAIL}", 
-                            data={"Asset": q1, "Liquidity": q2, "Reason": q3, "_captcha": "false"}
+                            data={
+                                "Asset": q1, 
+                                "Liquidity": q2, 
+                                "Reason": q3,
+                                "_subject": "NEW APPLICATION: Silent Circle", # Helps visibility
+                                "_template": "table" # Makes the email look cleaner
+                            }
                         )
                         
-                        # IF SUCCESS (200 OK)
                         if response.status_code == 200:
                             st.session_state.step = 3
                             st.rerun()
-                            
-                        # IF FAILURE (SHOW ERROR ON SCREEN)
                         else:
                             st.error(f"TRANSMISSION FAILED. ERROR CODE: {response.status_code}")
-                            st.warning(f"SERVER SAYS: {response.text}")
-                            st.write("CHECK: Did you verify your email address?")
                             
                     except Exception as e:
                         st.error(f"SYSTEM CRASH: {e}")
