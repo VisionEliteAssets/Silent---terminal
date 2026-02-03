@@ -7,8 +7,7 @@ st.set_page_config(page_title="SECURE TERMINAL", page_icon="🔒")
 
 # --- YOUR FORMSPREE LINK ---
 # Keep your link exactly as it is!
-DATABASE_LINK = "https://formspree.io/f/mqkvojzb"
-
+DATABASE_LINK = "https://formspree.io/f/mqelnqzb"
 # --- CUSTOM CSS ---
 st.markdown("""
     <style>
