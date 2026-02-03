@@ -3,8 +3,7 @@ import time
 import requests
 
 # --- CONFIGURATION ---
-st.set_page_config(page_title="SECURE TERMINAL", page_icon="🔒")
-
+st.set_page_config(page_title="SILENT TERMINAL LIVE", page_icon="🔒")
 # --- https://formspree.io/f/mqelnqzb ---
 # Example: "https://formspree.io/f/mqkvojzb"
 DATABASE_LINK = "https://formspree.io/f/mqelnqzb"
