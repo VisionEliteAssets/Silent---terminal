@@ -7,7 +7,7 @@ st.set_page_config(page_title="SECURE TERMINAL", page_icon="🔒")
 
 # --- https://formspree.io/f/mqelnqzb ---
 # Example: "https://formspree.io/f/mqkvojzb"
-DATABASE_LINK = "PASTE_YOUR_LINK_HERE_INSIDE_QUOTES"
+DATABASE_LINK = "https://formspree.io/f/mqelnqzb"
 
 # --- CUSTOM CSS (THE LOOK) ---
 st.markdown("""
