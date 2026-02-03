@@ -3,12 +3,13 @@ import time
 import requests
 
 # --- CONFIGURATION ---
-st.set_page_config(page_title="SILENT TERMINAL LIVE", page_icon="🔒")
-# --- https://formspree.io/f/mqelnqzb ---
-# Example: "https://formspree.io/f/mqkvojzb"
-DATABASE_LINK = "https://formspree.io/f/mqelnqzb"
+st.set_page_config(page_title="SECURE TERMINAL", page_icon="🔒")
 
-# --- CUSTOM CSS (THE LOOK) ---
+# --- YOUR FORMSPREE LINK ---
+# Keep your link exactly as it is!
+DATABASE_LINK = "https://formspree.io/f/mqkvojzb"
+
+# --- CUSTOM CSS ---
 st.markdown("""
     <style>
     .stApp {
@@ -32,7 +33,6 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- SESSION STATE ---
 if 'step' not in st.session_state:
     st.session_state.step = 1
 
@@ -59,22 +59,31 @@ elif st.session_state.step == 2:
         st.write("**1. TARGET ASSET:**")
         q1 = st.text_input("Target Asset")
         
-        st.write("**2. LIQUIDITY:**")
+        st.write("**2. LIQUIDITY STATUS:**")
         q2 = st.text_input("Liquidity")
         
-        st.write("**3. REASONING:**")
+        st.write("**3. WHY SHOULD THE ARCHITECT TRUST YOU?**")
         q3 = st.text_area("Reasoning")
+
+        # --- NEW FIELD ADDED HERE ---
+        st.write("**4. SECURE RETURN SIGNAL (EMAIL / ID):**")
+        q4 = st.text_input("Contact Info")
         
         submit = st.form_submit_button("TRANSMIT DATA")
         
         if submit:
-            if len(q1) > 2:
+            # We now require q4 (Contact Info) to be filled out
+            if len(q1) > 2 and len(q4) > 5:
                 with st.spinner("UPLOADING TO VAULT..."):
                     try:
-                        # Send data to Formspree
                         response = requests.post(
                             DATABASE_LINK, 
-                            data={"Asset": q1, "Liquidity": q2, "Reason": q3}
+                            data={
+                                "Asset": q1, 
+                                "Liquidity": q2, 
+                                "Reason": q3,
+                                "Contact_Signal": q4  # <--- Sends the identity to Formspree
+                            }
                         )
                         
                         if response.status_code == 200:
@@ -82,10 +91,11 @@ elif st.session_state.step == 2:
                             st.rerun()
                         else:
                             st.error(f"UPLOAD FAILED. CODE: {response.status_code}")
-                            st.write("CHECK: Did you paste the correct link?")
                             
                     except Exception as e:
                         st.error(f"SYSTEM CRASH: {e}")
+            else:
+                st.warning("> ERROR: INSUFFICIENT DATA. IDENTITY REQUIRED.")
 
 # --- STEP 3: SUCCESS ---
 elif st.session_state.step == 3:
