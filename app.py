@@ -1,15 +1,14 @@
 import streamlit as st
 import time
-import requests  # This helps us send the email
+import requests
 
 # --- CONFIGURATION ---
 st.set_page_config(page_title="SECURE TERMINAL", page_icon="🔒")
 
 # --- REPLACE THIS WITH YOUR EMAIL ---
-# The answers will be sent here.
-MY_EMAIL = "kevin@visioneliteassets.xyz" 
+MY_EMAIL = "YOUR_EMAIL_HERE@example.com" 
 
-# --- CUSTOM CSS (THE LOOK) ---
+# --- CUSTOM CSS ---
 st.markdown("""
     <style>
     .stApp {
@@ -46,47 +45,52 @@ if st.session_state.step == 1:
     if st.button("AUTHENTICATE"):
         if code == "GHOST-77-ALPHA":
             with st.spinner("DECRYPTING PROTOCOL..."):
-                time.sleep(1.5)
+                time.sleep(1)
             st.session_state.step = 2
             st.rerun()
         else:
-            st.error("> ACCESS DENIED. TERMINATING.")
+            st.error("> ACCESS DENIED.")
 
 # --- STEP 2: THE INTERROGATION ---
 elif st.session_state.step == 2:
     st.title("> IDENTITY PROTOCOL")
-    st.write("ANSWER THE FOLLOWING TO DETERMINE ELIGIBILITY.")
     
     with st.form("vetting_form"):
-        st.write("**1. DEFINE TARGET ASSET CLASS (UNOBTAINABLE ONLY):**")
+        st.write("**1. TARGET ASSET:**")
         q1 = st.text_input("Target Asset")
-        
-        st.write("**2. LIQUIDITY STATUS (T+7 DAYS):**")
+        st.write("**2. LIQUIDITY:**")
         q2 = st.text_input("Liquidity")
-        
-        st.write("**3. WHY SHOULD THE ARCHITECT TRUST YOU?**")
+        st.write("**3. REASONING:**")
         q3 = st.text_area("Reasoning")
         
         submit = st.form_submit_button("TRANSMIT DATA")
         
         if submit:
-            if len(q1) > 2 and len(q3) > 5:
-                # --- SEND EMAIL LOGIC ---
-                with st.spinner("ENCRYPTING & TRANSMITTING..."):
+            if len(q1) > 2:
+                with st.spinner("TRANSMITTING..."):
                     try:
+                        # --- DEBUG MODE ON ---
+                        # We are capturing the specific response from the email server
                         response = requests.post(
                             f"https://formsubmit.co/{MY_EMAIL}", 
                             data={"Asset": q1, "Liquidity": q2, "Reason": q3, "_captcha": "false"}
                         )
-                        st.session_state.step = 3
-                        st.rerun()
-                    except:
-                        st.error("CONNECTION ERROR. RETRY.")
-            else:
-                st.warning("> ERROR: INSUFFICIENT DATA.")
+                        
+                        # IF SUCCESS (200 OK)
+                        if response.status_code == 200:
+                            st.session_state.step = 3
+                            st.rerun()
+                            
+                        # IF FAILURE (SHOW ERROR ON SCREEN)
+                        else:
+                            st.error(f"TRANSMISSION FAILED. ERROR CODE: {response.status_code}")
+                            st.warning(f"SERVER SAYS: {response.text}")
+                            st.write("CHECK: Did you verify your email address?")
+                            
+                    except Exception as e:
+                        st.error(f"SYSTEM CRASH: {e}")
 
 # --- STEP 3: SUCCESS ---
 elif st.session_state.step == 3:
     st.title("> TRANSMISSION COMPLETE")
-    st.success("Dossier created. The Architect will signal you if parameters match.")
-    st.write("Connection closing...")
+    st.success("Dossier created.")
