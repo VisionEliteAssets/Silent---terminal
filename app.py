@@ -7,7 +7,7 @@ st.set_page_config(page_title="SECURE TERMINAL", page_icon="🔒")
 
 # --- YOUR FORMSPREE LINK ---
 # Keep your link exactly as it is!
-DATABASE_LINK = "https://formspree.io/f/mqelnqzb"
+DATABASE_LINK = "https://hook.eu1.make.com/byospolentn6xc129k6m3sginx9api1f"
 # --- CUSTOM CSS ---
 st.markdown("""
     <style>
